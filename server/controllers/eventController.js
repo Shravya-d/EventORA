@@ -1,8 +1,7 @@
 const Event = require('../models/Event.js');
 
-exports.getEvents = async (req, res) => {
+exports.getEvents = async (req, res, next) => {
     try {
-
         const filters = {};
         if (req.query.category) {
             filters.category = req.query.category;
@@ -11,14 +10,14 @@ exports.getEvents = async (req, res) => {
             filters.ticketPrice = req.query.ticketPrice;
         }
 
-        const events = await Event.find();
+        const events = await Event.find(filters);
         res.json(events);
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        next(error);
     }
 };
 
-exports.getEventById = async (req, res) => {
+exports.getEventById = async (req, res, next) => {
     try {
         const event = await Event.findById(req.params.id);
         if (!event) {
@@ -26,23 +25,24 @@ exports.getEventById = async (req, res) => {
         }
         res.json(event);
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        next(error);
     }
 };
 
-exports.createEvent = async (req, res) => {
-    const {
-        title,
-        description,
-        date,
-        location,
-        category,
-        totalSeats,
-        availableSeats,
-        ticketPrice,
-        imageUrl
-    } = req.body;
+exports.createEvent = async (req, res, next) => {
     try {
+        const {
+            title,
+            description,
+            date,
+            location,
+            category,
+            totalSeats,
+            availableSeats,
+            ticketPrice,
+            imageUrl
+        } = req.body;
+
         const event = await Event.create({
             title,
             description,
@@ -57,14 +57,13 @@ exports.createEvent = async (req, res) => {
         });
         res.status(201).json(event);
     } catch (error) {
-        res.status(400).json({ error: 'Invalid event data' });
-        console.log(error);
+        next(error);
     }
 };
 
-exports.updateEvent = async (req, res) => {
-    const { title, description, date, location, category, ticketPrice, totalSeats, imageUrl } = req.body;
+exports.updateEvent = async (req, res, next) => {
     try {
+        const { title, description, date, location, category, ticketPrice, totalSeats, imageUrl } = req.body;
         const event = await Event.findByIdAndUpdate(req.params.id, {
             title,
             description,
@@ -74,17 +73,18 @@ exports.updateEvent = async (req, res) => {
             totalSeats,
             ticketPrice,
             imageUrl
-        }, { new: true });
+        }, { new: true, runValidators: true });
+        
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
         res.json(event);
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        next(error);
     }
 };
 
-exports.deleteEvent = async (req, res) => {
+exports.deleteEvent = async (req, res, next) => {
     try {
         const event = await Event.findByIdAndDelete(req.params.id);
         if (!event) {
@@ -92,6 +92,6 @@ exports.deleteEvent = async (req, res) => {
         }
         res.json({ message: 'Event deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        next(error);
     }
 };

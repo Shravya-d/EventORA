@@ -8,7 +8,7 @@ router.post('/', protect, bookEvent);
 router.post('/send-otp', protect, sendBookingOTP);
 router.get('/my', protect, getMyBookings);
 router.put('/:id/confirm', protect, admin, confirmBooking);
-router.delete('/:id', protect, admin, cancelBooking);
+router.delete('/:id', protect, cancelBooking);
 router.get('/', protect, admin, getAllBookings);
 router.delete('/all', protect, admin, deleteAllBookings);
 module.exports = router;

@@ -52,7 +52,7 @@ const Navbar = () => {
                                 {/* 👨‍💼 ADMIN PANEL */}
                                 {user.role === 'admin' && (
                                     <Link
-                                        to="/admin"
+                                        to="/admin/dashboard"
                                         className="text-yellow-400 hover:text-yellow-300 font-semibold"
                                     >
                                         Admin Panel
@@ -67,7 +67,7 @@ const Navbar = () => {
                                 {/* 🔓 LOGOUT */}
                                 <button
                                     onClick={handleLogout}
-                                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition shadow-md"
+                                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition shadow-md font-medium"
                                 >
                                     Logout
                                 </button>
@@ -88,6 +88,16 @@ const Navbar = () => {
                                     className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition"
                                 >
                                     Sign Up
+                                </Link>
+                                
+                                <span className="text-gray-500">|</span>
+
+                                {/* Admin Links */}
+                                <Link
+                                    to="/admin/login"
+                                    className="text-yellow-400 hover:text-yellow-300 transition text-sm font-medium"
+                                >
+                                    Admin Login
                                 </Link>
                             </>
                         )}

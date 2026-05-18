@@ -11,14 +11,20 @@ const otpSchema = new mongoose.Schema({
     },
     action: {
         type: String,
-        enum: ['account_verification', 'event_booking'],
+        enum: ['account_verification', 'event_booking', 'password_reset'],
         required: true
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-        //expires: 300 // OTP expires after 5 minutes
+        default: Date.now
+    },
+    expiresAt: {
+        type: Date,
+        default: () => new Date(+new Date() + 5 * 60 * 1000) // 5 minutes from now
     }
 });
-otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 300 });
+
+// Auto-delete expired OTPs using the expiresAt field
+otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
 module.exports = mongoose.models.OTP || mongoose.model('OTP', otpSchema);

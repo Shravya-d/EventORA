@@ -23,25 +23,29 @@ const eventSchema = new mongoose.Schema({
     },
     totalSeats: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, 'Total seats cannot be negative']
     },
     availableSeats: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, 'Available seats cannot be negative']
     },
     ticketPrice: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, 'Ticket price cannot be negative']
     },
     imageUrl: {
         type: String,
-        required: true
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
 
 module.exports = mongoose.model('Event', eventSchema);

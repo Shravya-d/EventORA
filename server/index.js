@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth.js');
 const eventRoutes = require('./routes/events.js');
 const bookingRoutes = require('./routes/bookings.js');
+const { errorHandler } = require('./middleware/errorMiddleware.js');
 
 dotenv.config();
 
@@ -14,12 +15,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS:", process.env.EMAIL_PASS); */
 //Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/bookings', bookingRoutes);
+
+// Error Handler Middleware
+app.use(errorHandler);
 
 // ✅ Better DB connection with async/await
 const connectDB = async () => {

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
@@ -10,46 +9,55 @@ import AdminDashboard from './pages/AdminDashboard.jsx';
 import PaymentSuccess from './pages/PaymentSuccess.jsx';
 import PaymentFailed from './pages/PaymentFailed.jsx';
 
+// New Pages
+import AdminLogin from './pages/AdminLogin.jsx';
+import AdminRegister from './pages/AdminRegister.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import VerifyResetOTP from './pages/VerifyResetOTP.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
+
+// Protected Routes wrappers
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import AdminRoute from './components/AdminRoute.jsx';
+
+// Toaster
+import { Toaster } from 'react-hot-toast';
+
 function App() {
-
-
   return (
     <div>
-
-
-
+      <Toaster position="top-center" reverseOrder={false} />
       <Navbar />
-
       <Routes>
-        {/* 🏠 Home Page */}
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
-
-        {/* 📝 Register Page */}
         <Route path="/register" element={<Register />} />
-
-        //Login page
         <Route path="/login" element={<Login />} />
-
-        //Event details page
         <Route path="/event/:id" element={<EventDetails />} />
+        
+        {/* Admin Auth Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
+        
+        {/* Forgot Password Flow */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-reset-otp" element={<VerifyResetOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* 👤 User */}
-        <Route path="/dashboard" element={<UserDashboard />} />
+        {/* User Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+        </Route>
 
-        {/* 👨‍💼 Admin */}
-        <Route path="/admin" element={<AdminDashboard />} />
-
-        {/* 💳 Payment */}
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/payment-failed" element={<PaymentFailed />} />
-
+        {/* Admin Protected Routes */}
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Route>
       </Routes>
-
-
-
     </div>
-
   )
 }
 
-export default App
+export default App;
